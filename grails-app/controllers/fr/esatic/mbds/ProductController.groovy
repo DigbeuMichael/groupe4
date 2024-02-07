@@ -1,14 +1,18 @@
 package fr.esatic.mbds
 
+import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
+@Secured(["ROLE_ADMIN"])
 class ProductController {
 
     ProductService productService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+
+    @Secured(["ROLE_ADMIN","ROLE_CLIENT"])
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond productService.list(params), model:[productCount: productService.count()]
